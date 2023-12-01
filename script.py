@@ -1,6 +1,7 @@
 import requests
 import sys
 import itertools
+from tqdm import tqdm
 from bitcoinlib.wallets import Wallet, wallet_delete_if_exists
 from bitcoinlib.mnemonic import Mnemonic
 
@@ -114,9 +115,9 @@ if number_of_missing_words > 1:
 
 something_found = False
 
-for missing_words_tuple in itertools.product(
+for missing_words_tuple in tqdm(itertools.product(
     BIP39_word_list, repeat=number_of_missing_words
-):
+)):
     wallet_delete_if_exists("Wallet", db_uri=None, force=False, db_password=None)
 
     phrase = known_first + " " + convertTuple(missing_words_tuple) + " " + known_second
