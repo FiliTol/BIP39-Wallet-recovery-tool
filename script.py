@@ -17,7 +17,7 @@ position_of_missing_words = 24
 wallet_witness_type = "legacy"
 # Changeable in 'segwit' for native segregated witness wallet, or 'p2sh-segwit' for legacy compatible wallets
 
-known_first = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon"
+known_first = ("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon")
 # first known part of the seed. Leave "" if the words you don't remember are the first ones
 
 known_second = ""
@@ -108,7 +108,7 @@ def convertTuple(tup):
     return st
 
 
-if number_of_missing_words >= 1:
+if number_of_missing_words > 1:
     print(
         "looks like you lost at least 2 words. That's a lot of entropy, it will take a while"
     )
@@ -153,7 +153,7 @@ for missing_words_tuple in itertools.product(
     walletKeys = w.get_keys(number_of_keys=gap_limit)
     i = 0
     for key in walletKeys:
-        i = i + 1
+        i += 1
         address = key.address
         result = requests.get(f"https://blockstream.info/api/address/{address}")
         api_response = result.json()
@@ -165,7 +165,7 @@ for missing_words_tuple in itertools.product(
             store_valid_wallet.close()
             something_found = True
         if api_response["chain_stats"]["funded_txo_sum"] > 0:
-            print("Balace Found!")
+            print("Balance Found!")
             print(
                 "balance of address",
                 i,
@@ -179,7 +179,11 @@ for missing_words_tuple in itertools.product(
             store_valid_wallet.close()
             something_found = True
         else:
-            print("nothin found on the address", i)
+            print("nothing found on the address", i)
 
 if something_found == False:
     print("Sadly, nothing has been found")
+
+
+
+
