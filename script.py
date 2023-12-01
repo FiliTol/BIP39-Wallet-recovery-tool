@@ -14,10 +14,13 @@ number_of_missing_words = 1
 position_of_missing_words = 24
 # 1-24. Position of the first unknown word. 1 means you don't remember the first one, 24 the last, and so on)
 
+supported_witness_type = ["legacy", "p2sh-segwit", "segwit"]
+# Witness types supported by the script as of now
+
 wallet_witness_type = "legacy"
 # Changeable in 'segwit' for native segregated witness wallet, or 'p2sh-segwit' for legacy compatible wallets
 
-known_first = ("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon")
+known_first = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon"
 # first known part of the seed. Leave "" if the words you don't remember are the first ones
 
 known_second = ""
@@ -44,7 +47,7 @@ finally:
     english_bip39_file.close()
 
 # First part: checking if params are OK
-if type(number_of_missing_words) != type(1):
+if type(number_of_missing_words) != int:
     print("use an int type for number_of_missing_words")
     sys.exit()
 
@@ -52,7 +55,7 @@ if number_of_missing_words > 24 or number_of_missing_words < 1:
     print("number_of_missing_words must be a number between 1 and 24")
     sys.exit()
 
-if type(position_of_missing_words) != type(1):
+if type(position_of_missing_words) != int:
     print("use an int type for position_of_missing_words")
     sys.exit()
 
@@ -66,7 +69,7 @@ if position_of_missing_words > 25 - number_of_missing_words:
     )
     sys.exit()
 
-if type(known_first) != type(known_second) != type("sample"):
+if type(known_first) != type(known_second) != str:
     print("use string type for both first_known and second_known")
     sys.exit()
 
@@ -84,15 +87,11 @@ for aux in known_second.split():
         print("known part of your mnemonic contains non-standard words")
         sys.exit()
 
-if (
-    wallet_witness_type != "segwit"
-    and wallet_witness_type != "legacy"
-    and wallet_witness_type != "p2sh-segwit"
-):
+if wallet_witness_type not in supported_witness_type:
     print("invalid witness type")
     sys.exit()
 
-if type(gap_limit) != type(10):
+if type(gap_limit) != int:
     print("use an int type for gap_limit")
     sys.exit()
 
@@ -150,7 +149,14 @@ for missing_words_tuple in itertools.product(
         print("cannot scan the entire wallet")
         print("proceed scanning first ", gap_limit, " addresses")
 
-    walletKeys = w.get_keys(number_of_keys=gap_limit)
+    '''
+    Change technique to calculate the balance of addresses. The current procedure 
+    only accounts fo funded_txo_sum for the address but does not account for the
+    spent_txo_sum.
+    Therefore the balance is not considered but rather the ever-received coins. 
+    '''
+
+    walletKeys = w.get_keys(number_of_keys = gap_limit)
     i = 0
     for key in walletKeys:
         i += 1
