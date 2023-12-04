@@ -66,7 +66,8 @@ if position_of_missing_words > 24 or position_of_missing_words < 1:
 
 if position_of_missing_words > 25 - number_of_missing_words:
     print(
-        "Please be consistent with the values you set. number_of_missing_words can't be greater of free positions in the seedphrase"
+        "Please be consistent with the values you set. number_of_missing_words can't be greater of free positions in "
+        "the seedphrase"
     )
     sys.exit()
 
@@ -96,9 +97,10 @@ if type(gap_limit) != int:
     print("use an int type for gap_limit")
     sys.exit()
 
-if gap_limit < 1 and gap_limit > 50:
+if 1 > gap_limit > 50:
     print("gap_limit must be a number between 1 and 50")
     sys.exit()
+
 
 # Second part: searching
 
@@ -116,7 +118,7 @@ if number_of_missing_words > 1:
 something_found = False
 
 for missing_words_tuple in tqdm(itertools.product(
-    BIP39_word_list, repeat=number_of_missing_words
+        BIP39_word_list, repeat = number_of_missing_words
 )):
     wallet_delete_if_exists("Wallet", db_uri=None, force=False, db_password=None)
 
@@ -157,7 +159,7 @@ for missing_words_tuple in tqdm(itertools.product(
     Therefore the balance is not considered but rather the ever-received coins. 
     '''
 
-    walletKeys = w.get_keys(number_of_keys = gap_limit)
+    walletKeys = w.get_keys(number_of_keys=gap_limit)
     i = 0
     for key in walletKeys:
         i += 1
@@ -188,9 +190,5 @@ for missing_words_tuple in tqdm(itertools.product(
         else:
             print("nothing found on the address", i)
 
-if something_found == False:
+if not something_found:
     print("Sadly, nothing has been found")
-
-
-
-
