@@ -21,7 +21,8 @@ supported_witness_type = ["legacy", "p2sh-segwit", "segwit"]
 wallet_witness_type = "legacy"
 # Changeable in 'segwit' for native segregated witness wallet, or 'p2sh-segwit' for legacy compatible wallets
 
-known_first = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon"
+known_first = ("abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon "
+               "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon")
 # first known part of the seed. Leave "" if the words you don't remember are the first ones
 
 known_second = ""
