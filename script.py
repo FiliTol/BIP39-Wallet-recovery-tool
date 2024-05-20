@@ -189,7 +189,7 @@ for missing_words_tuple in tqdm(itertools.product(
             store_valid_wallet.close()
             something_found = True
         else:
-            print("nothing found on the address", i)
+            print("nothing found on the address ", i)
 
 if not something_found:
     print("Sadly, nothing has been found")
